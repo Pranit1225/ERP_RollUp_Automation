@@ -1,8 +1,15 @@
+from concurrent.futures import thread
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 from tkinter import font
 
 import os
+
+from excel_reader import read_part_numbers
+
+from automation import run_automation
+
+import threading
 
 class RollupApp(tk.Tk):
 
@@ -10,7 +17,7 @@ class RollupApp(tk.Tk):
         super().__init__()
 
         self.title("Amphenol Interconnect India Pvt Ltd")
-        self.geometry("650x380")
+        self.geometry("650x450")
         self.resizable(False,False)
 
         self.selected_file = ""
@@ -91,22 +98,7 @@ class RollupApp(tk.Tk):
             self,
             text="After clicking START, click inside the ERP textbox before the countdown ends.",
             foreground="blue"
-        ).pack(pady=20)
-
-#!Status
-
-        status_frame = ttk.LabelFrame(
-            self,
-            text="Status",
-            padding=10
-        )
-        status_frame.pack(fill="x", padx=padding)
-
-        self.status_label = ttk.Label(
-            status_frame,
-            text="Ready",
-        )
-        self.status_label.pack(anchor="w")
+        ).pack(pady=10)
 
 #! Progress Bar
 
@@ -131,6 +123,22 @@ class RollupApp(tk.Tk):
             text= "START AUTOMATION",
             command=self.start_clicked
         ).pack(pady=20, ipadx=25, ipady=8)
+
+
+#!Status
+
+        status_frame = ttk.LabelFrame(
+            self,
+            text="Status",
+            padding=10
+        )
+        status_frame.pack(fill="x", padx=padding)
+
+        self.status_label = ttk.Label(
+            status_frame,
+            text="Ready",
+        )
+        self.status_label.pack(anchor="w")
 
 #!--------------------------
 
@@ -160,10 +168,19 @@ class RollupApp(tk.Tk):
                 "Please select an Excel File"
             )
             return
+        
+        parts = read_part_numbers(self.selected_file)
+        delay = int(self.delay_spinbox.get())
+        
+        thread = threading.Thread(
+            target=run_automation,
+            args=(parts, delay),
+            daemon=True
+        )
+        thread.start()
 
-        delay = self.delay_spinbox.get()
 
         messagebox.showinfo(
-            "Information",
-            f"Automation will begin after {delay} seconds."
+            "Success",
+            f"{len(parts)} Part Numbers Loaded."
         )
