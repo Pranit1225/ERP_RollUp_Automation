@@ -118,11 +118,13 @@ class RollupApp(tk.Tk):
 
 #! Start
 
-        ttk.Button(
+        self.start_button = ttk.Button(
             self,
             text= "START AUTOMATION",
-            command=self.start_clicked
-        ).pack(pady=20, ipadx=25, ipady=8)
+            command=self.start_clicked,
+            state="disabled"
+        )
+        self.start_button.pack(pady=20, ipadx=25, ipady=8)
 
 
 #!Status
@@ -157,6 +159,8 @@ class RollupApp(tk.Tk):
         self.file_entry.insert(0, file_path)
 
         self.file_label.config(text=os.path.basename(file_path))
+
+        self.start_button.config(state="normal")
 
 #!----------------------------------------
 
