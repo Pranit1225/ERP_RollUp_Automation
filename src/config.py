@@ -1,0 +1,6 @@
+WINDOW_TITLE = "Macola Roll-Up Automation"
+
+DEFAULT_DELAY = 5
+
+WINDOW_WIDTH = 650
+WINDOW_HEIGHT = 380
