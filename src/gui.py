@@ -13,7 +13,7 @@ class RollupApp(tk.Tk):
         super().__init__()
 
         self.title("Amphenol Interconnect India Pvt Ltd")
-        self.geometry("650x650")
+        self.geometry("650x450")
         self.resizable(False,False)
 
         self.selected_file = ""
@@ -184,7 +184,7 @@ class RollupApp(tk.Tk):
         self.file_entry.delete(0, tk.END)
         self.file_entry.insert(0, file_path)
 
-        self.file_label.config(text=f"Selected {os.path.basename(file_path)}")
+        self.file_label.config(text=f"{os.path.basename(file_path)}")
 
 #? Update Status
 
