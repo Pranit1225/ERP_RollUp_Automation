@@ -1,14 +1,10 @@
 from concurrent.futures import thread
 import tkinter as tk
-from tkinter import ttk, filedialog, messagebox
-from tkinter import font
+from tkinter import ttk, filedialog
 
 import os
-
 from excel_reader import read_part_numbers
-
 from automation import run_automation
-
 import threading
 
 class RollupApp(tk.Tk):
@@ -17,10 +13,11 @@ class RollupApp(tk.Tk):
         super().__init__()
 
         self.title("Amphenol Interconnect India Pvt Ltd")
-        self.geometry("650x450")
+        self.geometry("650x650")
         self.resizable(False,False)
 
         self.selected_file = ""
+        self.parts=[]
 
         self.build_ui()
 
@@ -136,11 +133,25 @@ class RollupApp(tk.Tk):
         )
         status_frame.pack(fill="x", padx=padding)
 
+#?-------------------
         self.status_label = ttk.Label(
             status_frame,
             text="Ready",
         )
-        self.status_label.pack(anchor="w")
+        self.status_label.pack(anchor="w", pady=2)
+#?--------------------
+        self.current_part_label = ttk.Label(
+            status_frame,
+            text="Current Part : "
+        )
+        self.current_part_label.pack(anchor="w", pady=2)
+#?--------------------
+
+        self.records_label = ttk.Label(
+            status_frame,
+            text="Records : 0/0"
+        )
+        self.current_part_label.pack(anchor="w", pady=2)
 
 #!--------------------------
 
@@ -153,38 +164,109 @@ class RollupApp(tk.Tk):
         if not file_path:
             return
 
-        self.selected_file = file_path
+        try:
+            parts = read_part_numbers(file_path)
+        except Exception as error:
+            self.status_label.config(text="Unable to read Excel File")
+            print(f"Excel Error : {error}")
 
+            return
+        if not parts:
+            self.status_label.config(text="No Entries Found.")
+
+            return
+    
+        self.selected_file = file_path
+        self.parts = parts
+
+#?Display Selected File
         self.file_entry.delete(0, tk.END)
         self.file_entry.insert(0, file_path)
 
-        self.file_label.config(text=os.path.basename(file_path))
+        self.file_label.config(text=f"Selected {os.path.basename(file_path)}")
+
+#? Update Status
+
+        self.status_label.config(text=f"Status : {len(parts)} Entries Loaded")
+        self.current_part_label.config(text="Current Part : ")
+        self.records_label.config(text=f"Records : 0 / {len(parts)}")
+
+#? Reset Progress
+        self.progress["maximum"] = len(parts)
+        self.progress["value"] = 0
+        self.progress_label.config( text=f"0 / {len(parts)}")
 
         self.start_button.config(state="normal")
-
 #!----------------------------------------
+#! On CLICKING
 
     def start_clicked(self):
-
-        if self.selected_file == "":
-            messagebox.showerror(
-                "Error",
-                "Please select an Excel File"
+        
+        if not self.parts:
+            self.status_label.config(
+            text="Status : Please select an Excel file."
+        )
+            return
+        try:
+            delay = int(self.delay_spinbox.get())
+        except ValueError:
+            self.status_label.config(
+                text="Invalid delay value."
             )
             return
-        
-        parts = read_part_numbers(self.selected_file)
-        delay = int(self.delay_spinbox.get())
-        
-        thread = threading.Thread(
-            target=run_automation,
-            args=(parts, delay),
-            daemon=True
-        )
-        thread.start()
 
+        # Reset progress
+        self.progress["value"] = 0
+        self.progress_label.config(text=f"0 / {len(self.parts)}")
+        self.records_label.config(text=f"Records : 0 / {len(self.parts)}")
+        self.current_part_label.config(text="Current Part : -")
 
-        messagebox.showinfo(
-            "Success",
-            f"{len(parts)} Part Numbers Loaded."
+       # parts = read_part_numbers(self.selected_file)
+        
+        threading.Thread(
+                target=run_automation,
+                args=(
+                    self.parts,
+                    delay,
+                    self.on_countdown,
+                    self.on_progress,
+                    self.on_complete
+                ),
+                daemon=True
+            ).start()
+        
+
+        self.start_button.config(state="disabled")
+
+#! STATUS PROGRESS
+
+    def on_countdown(self, seconds):
+
+        self.after(
+            0,
+            lambda: self.status_label.config(text=f"Status : Automation Begins in {seconds} seconds...")
         )
+
+    def on_progress(self, current, total, part):
+
+        def update():
+            self.progress["maximum"] = total
+            self.progress["value"] = current
+
+            self. progress_label.config(text=f"{current} / {total}")
+            self.records_label.config(text=f"Records : {current} / {total}")
+            self.cuurent_label.config(text=f"Current Part : {part}")
+            self.status_label.config(text="Status : Running")
+
+        self.after(0, update)
+
+    def on_complete(self, total):
+
+        def update():
+
+            self.status_label.config(text=f"Status : Completed. Processed {total} Records")
+            self.current_part_label.config(text="Current Part : ")
+            self.start_button.config(state="normal")
+
+        self.after(0, update)
+
