@@ -168,6 +168,17 @@ class RollupApp(tk.Tk):
         )
         self.current_part_label.pack(anchor="w", pady=2)
 
+        # Small developer watermark
+        ttk.Label(
+            self,
+            text="By Pranit Govande",
+            font=("Segoe UI", 7),
+            foreground="#B0B0B0"
+        ).pack(
+            side="bottom",
+            pady=(0, 4)
+            )
+
 #!--------------------------
 
     def browse_files(self):
