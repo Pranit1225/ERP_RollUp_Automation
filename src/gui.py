@@ -18,6 +18,7 @@ class RollupApp(tk.Tk):
 
         self.selected_file = ""
         self.parts=[]
+        self.stop_event = threading.Event()
 
         self.build_ui()
 
@@ -53,7 +54,8 @@ class RollupApp(tk.Tk):
         ttk.Button(
             file_frame,
             text="Browse",
-            command=self.browse_files
+            command=self.browse_files,
+            cursor="hand2"
         ).pack(side="right")
 
 #! Selected File
@@ -113,18 +115,30 @@ class RollupApp(tk.Tk):
         )
         self.progress_label.pack()
 
-#! Start
+#! Start & Stop ---------------------------------
 
-        self.start_button = ttk.Button(
-            self,
+        button_frame = ttk. Frame()
+        button_frame.pack(pady=(15,15))
+
+        self.start_button = tk.Button(
+            button_frame,
             text= "START AUTOMATION",
             command=self.start_clicked,
-            state="disabled"
+            state="disabled",
+            #cursor="hand2"
         )
-        self.start_button.pack(pady=20, ipadx=25, ipady=8)
+        self.start_button.pack(side="left" ,padx=(0,15), ipadx=25, ipady=8)
 
+        self.stop_button = tk.Button(
+            button_frame,
+            text="STOP AUTOMATION",
+            command=self.stop_clicked,
+            state="disabled",
+            #cursor="hand2"
+        )
+        self.stop_button.pack(side="left", padx=(15,0),ipadx=25, ipady=8)
 
-#!Status
+#!Status --------------------------------
 
         status_frame = ttk.LabelFrame(
             self,
@@ -197,11 +211,21 @@ class RollupApp(tk.Tk):
         self.progress["value"] = 0
         self.progress_label.config( text=f"0 / {len(parts)}")
 
-        self.start_button.config(state="normal")
+        self.start_button.config(state="normal", 
+                    bg="#2E7D32",
+                    fg="#FFFFFF",
+                    disabledforeground="white",
+                    activebackground="#256628",
+                    activeforeground="white", 
+                    cursor="hand2")
+
+
 #!----------------------------------------
 #! On CLICKING
 
     def start_clicked(self):
+
+        self.stop_event.clear()
         
         if not self.parts:
             self.status_label.config(
@@ -231,13 +255,21 @@ class RollupApp(tk.Tk):
                     delay,
                     self.on_countdown,
                     self.on_progress,
-                    self.on_complete
+                    self.on_complete,
+                    self.on_stopped,
+                    self.stop_event
                 ),
                 daemon=True
             ).start()
         
 
         self.start_button.config(state="disabled")
+        self.stop_button.config(state="normal", 
+            bg="#C62828",
+            fg="white",
+            activebackground="#A61F1F",
+            activeforeground="white",
+            cursor="hand2")
 
 #! STATUS PROGRESS
 
@@ -269,10 +301,40 @@ class RollupApp(tk.Tk):
             
             self. progress_label.config(text=f"{total} / {total}")
             self.records_label.config(text=f"Records : {total} / {total}")
-            self.current_part_label.config(text=f"Last Part Processed : {part}")
+            self.current_part_label.config(text=f"Last Processed Part : {part}")
             self.status_label.config(text=f"Completed. Processed {total} Records")
 
-            self.start_button.config(state="normal")
+            self.start_button.config(state="normal", 
+                        bg="#2E7D32",
+                        fg="#FFFFFF",
+                        disabledforeground="white",
+                        activebackground="#256628",
+                        activeforeground="white", cursor="hand2")
+            self.stop_button.config(state="disabled", bg="SystemButtonFace", fg="SystemButtonText")
+
+        self.after(0, update)
+
+#! STOP BUTTON
+    def stop_clicked(self):
+        self.stop_event.set()
+
+        self.stop_button.config(state="disabled", bg="SystemButtonFace",
+    fg="SystemButtonText")
+
+        self.status_label.config(text="Stopping Automation...")
+
+    def on_stopped(self, processed):
+        def update():
+
+            self.status_label.config(text=f"Automation Stopped. Procesed {processed} Records.")
+            self.current_part_label.config(text=f"Current Part : (Refer to Last ERP Entry if Present)")
+            self.records_label.config(text=f"Records : {processed} / {len(self.parts)}")
+            self.stop_button.config(state="disabled", bg="SystemButtonFace", fg="SystemButtonText")
+            self.start_button.config(state="normal", bg="#2E7D32",
+                        fg="#FFFFFF",
+                        disabledforeground="white",
+                        activebackground="#256628",
+                        activeforeground="white", cursor="hand2")
 
         self.after(0, update)
 
