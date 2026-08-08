@@ -26,4 +26,4 @@ def run_automation(parts, delay, on_countdown, on_progress, on_complete):
         #Inform GUI of progress
         on_progress(current, total, part) 
 
-    on_complete(total)           
+    on_complete(total, part)           

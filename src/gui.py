@@ -105,7 +105,7 @@ class RollupApp(tk.Tk):
             length=500,
             mode="determinate"
         )
-        self.progress.pack(pady=(20, 5))
+        self.progress.pack()#pady=(20, 5))
 
         self.progress_label = ttk.Label(
             self,
@@ -137,12 +137,13 @@ class RollupApp(tk.Tk):
         self.status_label = ttk.Label(
             status_frame,
             text="Ready",
+            font=("Segoe UI", 9, "underline")
         )
         self.status_label.pack(anchor="w", pady=2)
 #?--------------------
         self.current_part_label = ttk.Label(
             status_frame,
-            text="Current Part : "
+            text="Current Part : —"
         )
         self.current_part_label.pack(anchor="w", pady=2)
 #?--------------------
@@ -187,8 +188,8 @@ class RollupApp(tk.Tk):
 
 #? Update Status
 
-        self.status_label.config(text=f"Status : {len(parts)} Entries Loaded")
-        self.current_part_label.config(text="Current Part : ")
+        self.status_label.config(text=f"{len(parts)} Entries Loaded")
+        self.current_part_label.config(text="Current Part : —")
         self.records_label.config(text=f"Records : 0 / {len(parts)}")
 
 #? Reset Progress
@@ -219,7 +220,7 @@ class RollupApp(tk.Tk):
         self.progress["value"] = 0
         self.progress_label.config(text=f"0 / {len(self.parts)}")
         self.records_label.config(text=f"Records : 0 / {len(self.parts)}")
-        self.current_part_label.config(text="Current Part : -")
+        self.current_part_label.config(text="Current Part : —")
 
        # parts = read_part_numbers(self.selected_file)
         
@@ -244,7 +245,7 @@ class RollupApp(tk.Tk):
 
         self.after(
             0,
-            lambda: self.status_label.config(text=f"Status : Automation Begins in {seconds} seconds...")
+            lambda: self.status_label.config(text=f"Automation Begins in {seconds} seconds...")
         )
 
     def on_progress(self, current, total, part):
@@ -255,12 +256,12 @@ class RollupApp(tk.Tk):
 
             self. progress_label.config(text=f"{current} / {total}")
             self.records_label.config(text=f"Records : {current} / {total}")
-            self.cuurent_label.config(text=f"Current Part : {part}")
+            self.current_part_label.config(text=f"Current Part : {part}")
             self.status_label.config(text="Running...")
 
         self.after(0, update)
 
-    def on_complete(self, total):
+    def on_complete(self, total, part):
 
         def update():
             self.progress["maximum"] = total
@@ -268,8 +269,9 @@ class RollupApp(tk.Tk):
             
             self. progress_label.config(text=f"{total} / {total}")
             self.records_label.config(text=f"Records : {total} / {total}")
-            self.current_part_label.config(text="Current Part : ")
+            self.current_part_label.config(text=f"Last Part Processed : {part}")
             self.status_label.config(text=f"Completed. Processed {total} Records")
+
             self.start_button.config(state="normal")
 
         self.after(0, update)
