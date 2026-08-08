@@ -256,16 +256,20 @@ class RollupApp(tk.Tk):
             self. progress_label.config(text=f"{current} / {total}")
             self.records_label.config(text=f"Records : {current} / {total}")
             self.cuurent_label.config(text=f"Current Part : {part}")
-            self.status_label.config(text="Status : Running")
+            self.status_label.config(text="Running...")
 
         self.after(0, update)
 
     def on_complete(self, total):
 
         def update():
-
-            self.status_label.config(text=f"Status : Completed. Processed {total} Records")
+            self.progress["maximum"] = total
+            self.progress["value"] = total
+            
+            self. progress_label.config(text=f"{total} / {total}")
+            self.records_label.config(text=f"Records : {total} / {total}")
             self.current_part_label.config(text="Current Part : ")
+            self.status_label.config(text=f"Completed. Processed {total} Records")
             self.start_button.config(state="normal")
 
         self.after(0, update)
