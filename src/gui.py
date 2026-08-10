@@ -121,7 +121,7 @@ class RollupApp(tk.Tk):
         )
         self.action_delay_spinbox.pack(side="right")
 
-        self.action_delay_spinbox.set("0.10")
+        self.action_delay_spinbox.set("0.1")
         
 #! Instructions
 
