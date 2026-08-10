@@ -12,12 +12,13 @@ The normal manual workflow requires the user to:
 2. Copy the value.
 3. Paste it into the Macola ERP input field.
 4. Press `Enter`.
-5. Press `Enter` again for validation.
-6. Repeat the process for every record.
+5. Wait for ERP validation.
+6. Press `Enter` again to confirm.
+7. Repeat the process for every record.
 
 This application automates that repetitive workflow.
 
-The user only needs to select the Excel file, configure the start delay, and click inside the Macola ERP input field when instructed.
+The user only needs to select the Excel file, configure the start delay and validation delay, and click inside the Macola ERP input field when instructed.
 
 ---
 
@@ -27,9 +28,10 @@ The user only needs to select the Excel file, configure the start delay, and cli
 - Read part numbers from Column A
 - Display the number of entries loaded
 - Configurable automation start delay
+- Configurable validation delay
 - Countdown before automation begins
 - Automated clipboard-based paste
-- Automated `Enter` + `Enter` validation sequence
+- Automated `Enter` + configurable delay + `Enter` validation sequence
 - Sequential processing of all records
 - Live processing progress
 - Current part number display
@@ -50,6 +52,10 @@ Load Column A
         ↓
 Display Entry Count
         ↓
+Configure Start Delay
+        ↓
+Configure Validation Delay
+        ↓
 Click START
         ↓
 Countdown
@@ -61,6 +67,8 @@ Copy Part Number
 Paste into Macola
         ↓
 Press Enter
+        ↓
+Validation Delay
         ↓
 Press Enter
         ↓
@@ -120,9 +128,27 @@ The application displays the number of entries loaded.
 
 Set the required countdown duration in seconds.
 
-The delay gives the user time to focus the Macola ERP input field.
+The start delay gives the user time to focus the Macola ERP input field before automation begins.
 
-### 4. Start Automation
+### 4. Configure Validation Delay
+
+Set the required validation delay.
+
+The validation delay controls the time between the first and second `Enter` presses during ERP validation.
+
+The available values are:
+
+```text
+0.1
+0.5
+1.0
+1.5
+2.0
+```
+
+Use a higher value when additional processing time is required by the Macola ERP/server.
+
+### 5. Start Automation
 
 Click:
 
@@ -132,19 +158,20 @@ START AUTOMATION
 
 During the countdown, click inside the Macola ERP part-number textbox.
 
-### 5. Automation
+### 6. Automation
 
 The application sequentially processes every part number:
 
 ```text
 Paste
 Enter
+Validation Delay
 Enter
 ```
 
 and then moves to the next record.
 
-### 6. Completion
+### 7. Completion
 
 When the final record has been processed, the application displays a completion status such as:
 
@@ -260,7 +287,7 @@ Run it from the project root.
 Alternatively:
 
 ```bash
-pyinstaller --onefile --windowed --name "Macola Roll-Up Automation" src\main.py
+pyinstaller --onefile --windowed --name "Macola Roll-Up Automation" --icon=assets\icon.ico src\main.py
 ```
 
 The executable will be generated in:
@@ -279,7 +306,8 @@ The project includes a dedicated Test Cases & Test Execution Report covering:
 - Excel file selection
 - Excel data loading
 - GUI control states
-- Countdown
+- Start countdown
+- Validation delay
 - Sequential automation
 - Paste and validation sequence
 - Progress tracking
@@ -289,7 +317,7 @@ The project includes a dedicated Test Cases & Test Execution Report covering:
 - Automation restart
 - Large-file processing
 
-Testing was performed against the defined V1 functionality before release.
+The application was tested with the Macola ERP environment and the automation workflow was successfully verified.
 
 ---
 
@@ -302,6 +330,7 @@ Testing was performed against the defined V1 functionality before release.
 - Sequential part-number entry
 - Macola keyboard automation
 - Configurable start delay
+- Configurable validation delay
 - Progress tracking
 - Stop functionality
 - Completion reporting
@@ -325,9 +354,13 @@ The application intentionally uses the existing Macola user interface and automa
 
 ## Version
 
-**Current Version: v1.0.0**
+**Current Version: v1.1.0**
 
-Initial production release of the Macola Roll-Up Automation utility.
+### v1.1.0
+
+Added configurable Validation Delay between the first and second `Enter` presses during ERP validation.
+
+The configurable delay allows the user to adjust the automation speed according to the processing response of the Macola ERP/server.
 
 ---
 
