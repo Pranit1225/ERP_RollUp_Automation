@@ -1,13 +1,17 @@
 import time 
 import pyautogui
 import pyperclip
-import threading
 
-def run_automation(parts, delay, on_countdown, on_progress, on_complete,on_stopped, stop_event):
+#Disable PyAutoGui's Built-in Pause. We Define the Action Delay now as the single source
+#pyautogui.PAUSE = 0
+
+def run_automation(parts, delay, action_delay,  on_countdown, on_progress, on_complete,on_stopped, stop_event):
 
     total = len(parts)
     processed = 0
     part = ""
+
+#! Countdown
 
     for seconds in range(delay, 0, -1):
 
@@ -16,6 +20,8 @@ def run_automation(parts, delay, on_countdown, on_progress, on_complete,on_stopp
             return
         on_countdown(seconds)
         time.sleep(1)
+
+#! Process Records
 
     for current, part in enumerate(parts, start=1):
 
@@ -31,7 +37,9 @@ def run_automation(parts, delay, on_countdown, on_progress, on_complete,on_stopp
         
         #Validation
         pyautogui.press("enter")
-        pyautogui.press("enter")  
+        time.sleep(action_delay)
+
+        pyautogui.press("enter")
 
         #Record Successfully sent
         processed = current
@@ -39,4 +47,6 @@ def run_automation(parts, delay, on_countdown, on_progress, on_complete,on_stopp
         #Inform GUI of progress
         on_progress(current, total, part) 
 
-    on_complete(total, part)           
+    on_complete(total, part)
+
+                
