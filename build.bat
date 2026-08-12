@@ -11,7 +11,7 @@ if exist dist rmdir /s /q dist
 
 echo.
 echo Building executable...
-pyinstaller --onefile --windowed --name "Macola Roll-Up Automation" --icon=assets\icon.ico src\main.py
+pyinstaller --onefile --windowed --name "Macola Roll-Up Automation" --icon=assets\icon.ico --version-file=assets\version_info.txt src\main.py
 
 echo.
 echo ==========================================
