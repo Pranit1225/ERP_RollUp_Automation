@@ -5,7 +5,11 @@ import pyperclip
 #Disable PyAutoGui's Built-in Pause. We Define the Action Delay now as the single source
 #pyautogui.PAUSE = 0
 
-def run_automation(parts, delay, action_delay,  on_countdown, on_progress, on_complete,on_stopped, stop_event):
+#! CHANGE HARDCODED DELAY VALUES
+START_DELAY = 7
+VALIDATION_DELAY = 1.0
+
+def run_automation(parts, on_countdown, on_progress, on_complete,on_stopped, stop_event): #def run_automation(parts, delay, action_delay,  on_countdown, on_progress, on_complete,on_stopped, stop_event):
 
     total = len(parts)
     processed = 0
@@ -13,7 +17,7 @@ def run_automation(parts, delay, action_delay,  on_countdown, on_progress, on_co
 
 #! Countdown
 
-    for seconds in range(delay, 0, -1):
+    for seconds in range(START_DELAY, 0, -1):
 
         if stop_event.is_set():
             on_stopped(processed)
@@ -37,7 +41,7 @@ def run_automation(parts, delay, action_delay,  on_countdown, on_progress, on_co
         
         #Validation
         pyautogui.press("enter")
-        time.sleep(action_delay)
+        time.sleep(VALIDATION_DELAY)
 
         pyautogui.press("enter")
 

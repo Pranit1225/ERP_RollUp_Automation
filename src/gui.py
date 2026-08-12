@@ -13,7 +13,7 @@ class RollupApp(tk.Tk):
         super().__init__()
 
         self.title("Amphenol Interconnect India Pvt Ltd")
-        self.geometry("650x470")
+        self.geometry("650x420")
         self.resizable(False,False)
 
         self.selected_file = ""
@@ -73,61 +73,61 @@ class RollupApp(tk.Tk):
 
 #! Delay
 
-        delay_frame = ttk.Frame(self)
-        delay_frame.pack(fill="x", padx=padding)
+        # delay_frame = ttk.Frame(self)
+        # delay_frame.pack(fill="x", padx=padding)
 
-        ttk.Label(
-            delay_frame,
-            text="Start Delay (seconds)",
-        ).pack(side="left")
+        # ttk.Label(
+        #     delay_frame,
+        #     text="Start Delay (seconds)",
+        # ).pack(side="left")
 
-        self.delay_spinbox = ttk.Spinbox(
-            delay_frame,
-            from_ = 1,
-            to = 60,
-            width=8
-        )
-        self.delay_spinbox.pack(side="right")
+        # self.delay_spinbox = ttk.Spinbox(
+        #     delay_frame,
+        #     from_ = 1,
+        #     to = 60,
+        #     width=8
+        # )
+        # self.delay_spinbox.pack(side="right")
 
-        self.delay_spinbox.set(5)
+        # self.delay_spinbox.set(5) 
 
-        action_delay_frame = ttk.Frame(self)
-        action_delay_frame.pack(fill="x", padx=padding,pady=(0,5))
+        # action_delay_frame = ttk.Frame(self)
+        # action_delay_frame.pack(fill="x", padx=padding,pady=(0,5))
 
-        ttk.Label(
-            action_delay_frame,
-            text="Validation Delay (seconds)"
-        ).pack(side="left", pady=10)
+        # ttk.Label(
+        #     action_delay_frame,
+        #     text="Validation Delay (seconds)"
+        # ).pack(side="left", pady=10)
 
-        self.action_delay_values = (
-            "0.1",
-            "0.5",
-            "1.0",
-            "1.5",
-            "2.0",
-            "2.5",
-            "3.0",
-            "3.5",
-            "4.0",
-            "4.5",
-            "5.0",
-        )
+        # self.action_delay_values = (
+        #     "0.1",
+        #     "0.5",
+        #     "1.0",
+        #     "1.5",
+        #     "2.0",
+        #     "2.5",
+        #     "3.0",
+        #     "3.5",
+        #     "4.0",
+        #     "4.5",
+        #     "5.0",
+        # )
 
-        self.action_delay_spinbox = ttk.Spinbox(
-            action_delay_frame,
-            values=self.action_delay_values,
-            width=8,
-            state="readonly"
-        )
-        self.action_delay_spinbox.pack(side="right")
+        # self.action_delay_spinbox = ttk.Spinbox(
+        #     action_delay_frame,
+        #     values=self.action_delay_values,
+        #     width=8,
+        #     state="readonly"
+        # )
+        # self.action_delay_spinbox.pack(side="right")
 
-        self.action_delay_spinbox.set("0.1")
+        # self.action_delay_spinbox.set("0.1")
         
 #! Instructions
 
         ttk.Label(
             self,
-            text="After clicking START, click inside the ERP textbox before the countdown ends.",
+            text="After clicking START, click inside the ERP textbox before the 7 Seconds countdown ends.",
             foreground="blue"
         ).pack(pady=10)
 
@@ -275,24 +275,24 @@ class RollupApp(tk.Tk):
             text="Status : Please select an Excel file."
         )
             return
-        try:
-            delay = int(self.delay_spinbox.get())
-        except ValueError:
-            self.status_label.config(
-                text="Invalid Delay Value."
-            )
-            return
+        # try:
+        #     delay = int(self.delay_spinbox.get())
+        # except ValueError:
+        #     self.status_label.config(
+        #         text="Invalid Delay Value."
+        #     )
+        #     return
 
-        try:
-            action_delay = float(self.action_delay_spinbox.get())
-        except ValueError:
-            self.status_label.config(
-                text="Status : Invalid Action Delay."
-            )
-            return
-        if not 0.05 <= action_delay <= 5.00:
-            self.status_label.config( text= " Action Delay must be between 0.05 - 5.00 seconds.")
-            return
+        # try:
+        #     action_delay = float(self.action_delay_spinbox.get())
+        # except ValueError:
+        #     self.status_label.config(
+        #         text="Status : Invalid Action Delay."
+        #     )
+        #     return
+        # if not 0.05 <= action_delay <= 5.00:
+        #     self.status_label.config( text= " Action Delay must be between 0.05 - 5.00 seconds.")
+        #     return
 
         # Reset progress
         self.progress["value"] = 0
@@ -306,8 +306,8 @@ class RollupApp(tk.Tk):
                 target=run_automation,
                 args=(
                     self.parts,
-                    delay,
-                    action_delay,
+                    # delay,
+                    # action_delay,
                     self.on_countdown,
                     self.on_progress,
                     self.on_complete,
