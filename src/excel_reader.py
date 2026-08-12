@@ -8,9 +8,13 @@ def read_part_numbers(file_path):
 
     part_numbers = []
 
-    for cell in sheet["A"]:
+#! Begin to Read from Row 2
+    for row in range(2, sheet.max_row + 1):
+        cell = sheet.cell(row=row, column=1)   #for cell in sheet["A"][1:]:
+        
         if cell.value is not None:
             value = str(cell.value).strip()
+
             if value != "":
                 part_numbers.append(value)
 
