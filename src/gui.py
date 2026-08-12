@@ -13,7 +13,7 @@ class RollupApp(tk.Tk):
         super().__init__()
 
         self.title("Amphenol Interconnect India Pvt Ltd")
-        self.geometry("650x420")
+        self.geometry("650x400")
         self.resizable(False,False)
 
         self.selected_file = ""
@@ -201,15 +201,15 @@ class RollupApp(tk.Tk):
         self.current_part_label.pack(anchor="w", pady=2)
 
         # Small developer watermark
-        ttk.Label(
-            self,
-            text="By Pranit Govande",
-            font=("Segoe UI", 7),
-            foreground="#717171"
-        ).pack(
-            side="bottom",
-            pady=(0, 4)
-            )
+        # ttk.Label(
+        #     self,
+        #     text="By Pranit Govande",
+        #     font=("Segoe UI", 7),
+        #     foreground="#717171"
+        # ).pack(
+        #     side="bottom",
+        #     pady=(0, 4)
+        #     )
 
 #!--------------------------
 
