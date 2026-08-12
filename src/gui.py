@@ -13,7 +13,7 @@ class RollupApp(tk.Tk):
         super().__init__()
 
         self.title("Amphenol Interconnect India Pvt Ltd")
-        self.geometry("650x400")
+        self.geometry("650x500")
         self.resizable(False,False)
 
         self.selected_file = ""
