@@ -8,8 +8,8 @@ import pyperclip
 pyautogui.FAILSAFE = True
 
 #! CHANGE HARDCODED DELAY VALUES
-START_DELAY = 7
-VALIDATION_DELAY = 1.0
+START_DELAY = 5
+VALIDATION_DELAY = 0.8
 
 def run_automation(parts, on_countdown, on_progress, on_complete,on_stopped, stop_event): #def run_automation(parts, delay, action_delay,  on_countdown, on_progress, on_complete,on_stopped, stop_event):
 

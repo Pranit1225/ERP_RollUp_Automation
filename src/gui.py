@@ -127,9 +127,15 @@ class RollupApp(tk.Tk):
 
         ttk.Label(
             self,
-            text="After clicking START, click inside the ERP textbox before the 7 Seconds countdown ends.",
+            text="After clicking START, click inside the ERP textbox before the 5 Seconds countdown ends.",
             foreground="blue"
         ).pack(pady=10)
+
+        ttk.Label(
+            self,
+            text="Emergency Stop: Move the cursor to any corner of the screen to stop automation.",
+            foreground="red"
+        ).pack(pady=(0, 10))
 
 #! Progress Bar
 
@@ -201,15 +207,15 @@ class RollupApp(tk.Tk):
         self.current_part_label.pack(anchor="w", pady=2)
 
         # Small developer watermark
-        # ttk.Label(
-        #     self,
-        #     text="By Pranit Govande",
-        #     font=("Segoe UI", 7),
-        #     foreground="#717171"
-        # ).pack(
-        #     side="bottom",
-        #     pady=(0, 4)
-        #     )
+        ttk.Label(
+            self,
+            text="By Pranit Govande",
+            font=("Segoe UI", 6),
+            foreground="#D0D0D0"
+        ).pack(
+            side="bottom",
+            pady=(0, 4)
+            )
 
 #!--------------------------
 
