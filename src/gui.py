@@ -378,10 +378,10 @@ class RollupApp(tk.Tk):
 
         self.status_label.config(text="Stopping Automation...")
 
-    def on_stopped(self, processed):
+    def on_stopped(self, processed, message="Automation Stopped"):
         def update():
 
-            self.status_label.config(text=f"Automation Stopped. Procesed {processed} Records.")
+            self.status_label.config(text=f"{message} | Processed {processed} Records.")
             self.current_part_label.config(text=f"Current Part : (Refer to Last ERP Entry if Present)")
             self.records_label.config(text=f"Records : {processed} / {len(self.parts)}")
             self.stop_button.config(state="disabled", bg="SystemButtonFace", fg="SystemButtonText")
